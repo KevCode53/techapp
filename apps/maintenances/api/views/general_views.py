@@ -7,12 +7,12 @@ from apps.maintenances.api.serializers.general_serializers import CompromiseSeri
 # Imports Third Party
 from rest_framework import generics
 
+# Imports Views
+from apps.core.api.views.api import GeneralListApiView
+
 class CompromiseCreateAPIView(generics.CreateAPIView):
     queryset = Compromise.objects.all()
     serializer_class = CompromiseSerializer
 
-class CompromiseListAPIView(generics.ListAPIView):
+class CompromiseListApiView(GeneralListApiView):
     serializer_class = CompromiseSerializer
-
-    def get_queryset(self):
-      return Compromise.objects.filter(state=True)

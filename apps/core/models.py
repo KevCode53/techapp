@@ -32,7 +32,7 @@ class Department(BaseModel):
   """Model definition for Department."""
 
   # TODO: Define fields here
-  code = models.CharField('Código', max_length=5, unique=True)
+  id = models.CharField('Código', primary_key=True, max_length=2, unique=True)
   name = models.CharField('Nombre', max_length=150, unique=True)
   historical = HistoricalRecords()
 
@@ -47,13 +47,13 @@ class Department(BaseModel):
   class Meta:
     """Meta definition for Department."""
 
-    unique_together = (('code', 'name'),)
+    # unique_together = (('code', 'name'),)
     verbose_name = 'Department'
     verbose_name_plural = 'Departments'
 
   def __str__(self):
     """Unicode representation of Department."""
-    return '%s %s' % (self.code, self.name)
+    return '%s %s' % (self.id, self.name)
 
   def save(self, *args, **kwargs):
     """Save method for Equipement."""
