@@ -1,9 +1,11 @@
+# Imports Third Party
 from rest_framework.routers import DefaultRouter
 
-from apps.users.api.api_views import user_api_view
+# Imports Views
+from apps.users.api.views.user_views import UserViewSet
 
 router = DefaultRouter()
 
-router.register('', user_api_view, basename='users')
+router.register(r'', UserViewSet, basename='user')
 
 urlpatterns = router.urls

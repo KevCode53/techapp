@@ -1,6 +1,7 @@
 # Imports for Django
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from datetime import date
 
 # Imports Models
 from apps.core.models import BaseModel
@@ -14,32 +15,47 @@ class Compromise(BaseModel):
   """Model definition for Compromise."""
 
   # TODO: Define fields here
-  user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Usuario'))
-  year = models.SmallIntegerField(_('Año'))
+  users = models.ManyToManyField(User, verbose_name=_('Usuarios'), blank=True)
+  # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Usuario'))
+  year = models.SmallIntegerField(_('Año'), editable=False)
   estimated_computers = models.PositiveSmallIntegerField(_('Computadoras Estimadas'), default=0)
-  total_computers = models.PositiveSmallIntegerField(_('Computadoras Totales'), default=0)
+  total_computers = models.PositiveSmallIntegerField(_('Computadoras Totales'), default=0, editable=False)
   ubications = models.ManyToManyField(Ubication, verbose_name=_('Fiscalias'))
 
   class Meta:
     """Meta definition for Compromise."""
 
-    unique_together = ('user', 'year')
+    # unique_together = ('users', 'year')
     verbose_name = 'Compromiso'
     verbose_name_plural = 'Compromisos'
 
   def __str__(self):
     """Unicode representation of Compromise."""
-    pass
+    return 'Compromise - %s, ' % (self.year)
 
-  def save(self):
-    """Save method for Compromise."""
-    pass
+  def save(self, *args, **kwargs):
+    """Save method for Equipement."""
+    self.year = self.set_year_compromise()
+    super(Compromise, self).save(*args, **kwargs)
 
   def get_absolute_url(self):
     """Return absolute url for Compromise."""
     return ('')
 
   # TODO: Define custom methods here
+
+  def set_year_compromise(self):
+    """Set year for Compromise."""
+    current_year = date.today().year
+    return current_year
+  
+  def get_department(self):
+    """Return department for Compromise."""
+    if self.ubiations.count() > 0:
+      return self.ubiations.first().department.name
+    else :
+      return ''
+    
 
 
 class Maintenance(BaseModel):
