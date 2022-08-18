@@ -36,13 +36,19 @@ class Compromise(BaseModel):
   def save(self, *args, **kwargs):
     """Save method for Equipement."""
     self.year = self.set_year_compromise()
+    # self.estimated_computers = self.set_estimated_computers()
     super(Compromise, self).save(*args, **kwargs)
 
-  def get_absolute_url(self):
-    """Return absolute url for Compromise."""
-    return ('')
-
   # TODO: Define custom methods here
+
+  def set_estimated_computers(self):
+    """Set estimated computers for Compromise."""
+    computers = 0
+    ubications = self.ubications.all()
+    for fiscalie in ubications:
+      computers += fiscalie.estimated_computers 
+    
+    return computers
 
   def set_year_compromise(self):
     """Set year for Compromise."""
@@ -51,8 +57,8 @@ class Compromise(BaseModel):
   
   def get_department(self):
     """Return department for Compromise."""
-    if self.ubiations.count() > 0:
-      return self.ubiations.first().department.name
+    if self.ubications.count() > 0:
+      return self.ubications.first().department.name
     else :
       return ''
     
